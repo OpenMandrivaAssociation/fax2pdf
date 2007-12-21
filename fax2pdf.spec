@@ -10,6 +10,7 @@ Patch0:		fax2pdf-patch01
 Requires:	hylafax-server
 BuildRequires:	tiff-devel
 BuildRequires:	zlib-devel
+BuildRoot:	%{_tmppath}/%{name}-buildroot
 
 %description
 This package contains the fax2pdf utility to convert Fax Files
