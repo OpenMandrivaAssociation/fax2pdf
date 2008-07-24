@@ -1,7 +1,7 @@
 Summary:	A Fax to PDF converter
 Name:		fax2pdf
 Version:	0.1.3
-Release:	%mkrel 4
+Release:	%mkrel 6
 License:	GPL
 Group:		Communications
 URL:		https://sourceforge.net/projects/fax2pdf/
