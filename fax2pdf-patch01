@@ -1,0 +1,98 @@
+diff -Naur fax2pdf-0.1.3/fax2pdf.cc fax2pdf-0.1.3a/fax2pdf.cc
+--- fax2pdf-0.1.3/fax2pdf.cc	2002-06-18 04:26:35.000000000 +0000
++++ fax2pdf-0.1.3a/fax2pdf.cc	2003-04-21 23:28:11.000000000 +0000
+@@ -21,7 +21,7 @@
+ //**********************************************************************
+ 
+ static char *cvsid = "@(#)$Id: fax2pdf.cc,v 1.3 2002/06/18 04:26:35 stamfest Exp $";
+-static short int ___n = cvsid - (char*)___n;	// avoid a warning for
++static short int ___n = cvsid - (char*)&___n;	// avoid a warning for
+ 						// unused cvsid
+ 
+ #include <iostream>
+@@ -32,6 +32,11 @@
+ 
+ #define DIRECT
+ 
++using std::ofstream;
++using std::cout;
++using std::cerr;
++using std::endl;
++
+ static  void putContig(TIFFRGBAImage*, uint32*,
+ 		       uint32, uint32, uint32, uint32, int32, int32, 
+ 		       unsigned char*);
+@@ -39,9 +44,9 @@
+ static unsigned char * storage = 0;
+ long wbytes;
+ 
+-typedef unsigned long uint32;
+-typedef long int32;
+-typedef unsigned char  u_char;
++// typedef unsigned long uint32;
++// typedef long int32;
++// typedef unsigned char  u_char;
+ 
+ u_char *process(long w, long h, float xr, float yr, uint32 *raster, page *p)
+ {
+@@ -99,7 +104,7 @@
+     image *pdfimg = new image(w,h,1,
+ 			      p->cutx + extra_w, 
+ 			      p->mediay - p->cuty - extra_h,
+-			      actual_w, -actual_h,
++			      (int)actual_w, (int)-actual_h,
+ 			      storage,
+ 			      wbytes * h);
+     p->addmark(pdfimg);
+@@ -118,7 +123,7 @@
+     exit(rc);
+ }
+ 
+-main(int argc, char* argv[])
++int main(int argc, char* argv[])
+ {
+     // prepared for commandline options
+     ostream *os = 0;
+diff -Naur fax2pdf-0.1.3/pdf.cc fax2pdf-0.1.3a/pdf.cc
+--- fax2pdf-0.1.3/pdf.cc	2002-06-18 04:26:35.000000000 +0000
++++ fax2pdf-0.1.3a/pdf.cc	2003-04-21 23:22:57.000000000 +0000
+@@ -21,11 +21,14 @@
+ //**********************************************************************
+ 
+ static char *cvsid = "@(#)$Id: pdf.cc,v 1.3 2002/06/18 04:26:35 stamfest Exp $";
+-static short int ___n = cvsid - (char*)___n;	// avoid a warning for
++static short int ___n = (cvsid - (char*)&___n);	// avoid a warning for
+ 						// unused cvsid
+ #include <zlib.h>
+ #include "pdf.h"
+ 
++using std::cerr;
++using std::endl;
++
+ //**********************************************************************
+ // class obj
+ //**********************************************************************
+@@ -402,7 +405,7 @@
+ //**********************************************************************
+ 
+ 
+-page::page(media_type m = a4) : streamed(false)
++page::page(media_type m) : streamed(false)
+ {
+     set_media(m);
+ }
+diff -Naur fax2pdf-0.1.3/pdf.h fax2pdf-0.1.3a/pdf.h
+--- fax2pdf-0.1.3/pdf.h	2002-06-18 04:26:35.000000000 +0000
++++ fax2pdf-0.1.3a/pdf.h	2003-04-21 23:20:00.000000000 +0000
+@@ -25,6 +25,11 @@
+ #include <string>
+ #include <cstdio>
+ #include <cstring>
++#include <iostream>
++
++using std::ostream;
++using std::vector;
++using std::string;
+ 
+ #define foreach(I,c)  for ( I = c.begin(); I != c.end() ; ++I ) 
+ 
